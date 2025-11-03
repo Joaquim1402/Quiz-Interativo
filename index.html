@@ -4,385 +4,319 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Quiz de Polaridade e Forças Intermoleculares</title>
+
   <style>
     :root {
-      --bg1:#e6f2ff;
-      --card:#ffffff;
-      --primary:#0b6fb6;
-      --accent:#4aa3ff;
-      --muted:#1f3b4d;
-      --correct:#2ea44f;
-      --wrong:#d73a49;
+      --primary: #007bff;
+      --correct: #28a745;
+      --wrong: #dc3545;
+      --bg: #e9f2ff;
     }
-    *{box-sizing:border-box}
+
     body {
-      margin:0;
-      font-family: Inter, system-ui, Arial;
-      background: linear-gradient(180deg, var(--bg1), #dff0ff);
-      color:#072036;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:28px;
+      font-family: "Poppins", sans-serif;
+      background: var(--bg);
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
     }
-    .container{width:100%;max-width:980px}
-    .card{
-      background:#fff;
-      border-radius:12px;
-      padding:18px;
-      box-shadow:0 6px 30px rgba(11,111,182,0.08);
+
+    .quiz-container {
+      background: #fff;
+      padding: 25px;
+      border-radius: 20px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 420px;
     }
-    header{display:flex;gap:12px;align-items:center;margin-bottom:12px}
-    .logo{
-      width:56px;height:56px;
-      border-radius:10px;
-      background:linear-gradient(135deg,var(--primary),var(--accent));
-      display:flex;align-items:center;justify-content:center;
-      color:#fff;font-weight:700;font-size:1.2rem;
+
+    .header {
+      text-align: center;
+      margin-bottom: 15px;
     }
-    h1{margin:0;font-size:1.35rem}
-    p.lead{margin:0;color:var(--muted)}
 
-    .meta{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
-    .timer{font-weight:700;color:var(--primary)}
-    .progress{height:10px;background:#f1f9ff;border-radius:999px;overflow:hidden}
-    .progress > i{display:block;height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));width:0%;transition:width .4s}
-
-    .question{font-weight:700;margin:10px 0;font-size:1.05rem}
-    .options{display:grid;gap:10px}
-    .option{
-      padding:12px;border-radius:10px;border:1px solid #e6eef6;cursor:pointer;background:white;transition:0.2s;
+    .header h2 {
+      color: var(--primary);
+      margin-bottom: 5px;
     }
-    .option:hover{transform:translateY(-3px);box-shadow:0 6px 18px rgba(11,111,182,0.06)}
-    .option.correct{border-left:6px solid var(--correct);background:rgba(46,164,79,0.04)}
-    .option.wrong{border-left:6px solid var(--wrong);background:rgba(215,58,73,0.04)}
 
-    .controls{display:flex;justify-content:space-between;align-items:center;margin-top:14px;gap:8px;flex-wrap:wrap}
-    button{background:var(--primary);color:#fff;border:0;padding:10px 14px;border-radius:10px;cursor:pointer;font-weight:700}
-    button.secondary{background:transparent;color:var(--primary);border:2px solid rgba(11,111,182,0.12)}
+    .header small {
+      color: #555;
+    }
 
-    .result-panel{display:none;margin-top:14px}
-    .result-grid{display:grid;grid-template-columns:1fr 360px;gap:12px}
-    .answers-list{max-height:360px;overflow:auto;padding:8px;border-radius:8px;border:1px dashed #e7f3ff;background:linear-gradient(180deg,#fbfdff,#f7fbff)}
-    .answers-list .item{padding:8px;border-radius:8px;margin-bottom:8px}
+    .question {
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
 
-    .footer{margin-top:12px;color:var(--muted);font-size:0.95rem;text-align:center}
-    .integrantes{margin-top:10px;font-size:0.95rem;line-height:1.6;color:var(--muted)}
+    .options button {
+      display: block;
+      width: 100%;
+      margin: 6px 0;
+      padding: 10px;
+      border: 2px solid #ddd;
+      background: #f8f9fa;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 15px;
+    }
 
-    .overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);display:none;align-items:center;justify-content:center;z-index:1000}
-    .gabarito{background:#fff;color:#072036;padding:18px;border-radius:12px;max-width:900px;max-height:80vh;overflow:auto}
-    .gabarito h3{margin-top:0}
-    .g-item{padding:10px;border-radius:8px;border:1px solid #eef6ff;margin-bottom:8px}
-    @media(max-width:880px){.result-grid{grid-template-columns:1fr}.card{padding:14px}}
+    .options button:hover {
+      background: #e6f0ff;
+      border-color: var(--primary);
+    }
+
+    .controls {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .controls button {
+      margin: 5px;
+      padding: 8px 16px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      font-weight: 500;
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .controls button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    .timer {
+      text-align: right;
+      color: #333;
+      font-weight: 500;
+      margin-bottom: 10px;
+    }
+
+    .result {
+      display: none;
+      text-align: center;
+    }
+
+    .result h3 {
+      color: var(--primary);
+    }
+
+    .gabarito-btn {
+      background: #17a2b8;
+    }
+
+    footer {
+      margin-top: 15px;
+      font-size: 14px;
+      text-align: center;
+      color: #444;
+    }
+
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+    }
+
+    .gabarito-modal {
+      background: #fff;
+      border-radius: 15px;
+      padding: 20px;
+      width: 90%;
+      max-width: 500px;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .gabarito-modal h3 {
+      color: var(--primary);
+      text-align: center;
+    }
+
+    .g-item {
+      border-bottom: 1px solid #ccc;
+      margin-bottom: 10px;
+      padding-bottom: 10px;
+    }
+
+    .close {
+      display: block;
+      text-align: center;
+      background: var(--wrong);
+      color: #fff;
+      border: none;
+      padding: 8px 15px;
+      margin: 10px auto 0;
+      border-radius: 10px;
+      cursor: pointer;
+    }
   </style>
 </head>
+
 <body>
-  <div class="container">
-    <div class="card">
-      <header>
-        <div class="logo">QZ</div>
-        <div>
-          <h1>Quiz: Polaridade e Forças Intermoleculares</h1>
-          <p class="lead">Turma: <strong>1º DS-B</strong></p>
-        </div>
-      </header>
-
-      <div class="meta">
-        <div>Questão <span id="qIndex">1</span> / <span id="qTotal">15</span></div>
-        <div style="display:flex;gap:12px;align-items:center">
-          <div class="timer">⏱ <span id="timeLeft">30</span>s</div>
-          <div style="width:240px"><div class="progress" aria-hidden><i id="progBar"></i></div></div>
-        </div>
-      </div>
-
-      <div id="quizArea">
-        <div id="questionBlock">
-          <div class="question" id="questionText"></div>
-          <div class="options" id="options"></div>
-        </div>
-
-        <div class="controls">
-          <div style="display:flex;gap:8px">
-            <button id="prevBtn" class="secondary">Anterior</button>
-            <button id="nextBtn">Próxima</button>
-          </div>
-          <div style="display:flex;gap:8px">
-            <button id="finishBtn">Finalizar</button>
-            <button id="resetBtn" class="secondary">Reiniciar</button>
-          </div>
-        </div>
-      </div>
-
-      <div id="resultPanel" class="result-panel">
-        <div class="result-grid">
-          <div>
-            <div style="display:flex;justify-content:space-between;align-items:center">
-              <div>
-                <div class="small">Resultado</div>
-                <div style="font-size:2rem;font-weight:800;color:var(--primary)" id="scoreText">0 / 15</div>
-                <div id="percentText" style="color:var(--muted)"></div>
-              </div>
-              <div style="text-align:right">
-                <button id="backToQuestions" class="secondary">Voltar</button>
-                <button id="openGabarito">Ver gabarito comentado</button>
-              </div>
-            </div>
-
-            <div style="margin-top:10px">
-              <div class="small">Gabarito rápido</div>
-              <div id="answerKey" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px"></div>
-            </div>
-          </div>
-
-          <div>
-            <div class="small">Respostas e explicações</div>
-            <div class="answers-list" id="answersList"></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="footer">
-        <p><strong>Integrantes do grupo:</strong></p>
-        <div class="integrantes">
-          Alan Rodrigues • Arthur Gabriel • Carlos Henrique • Luis Fernando • Rafael França • Rikelmy Fabricio • Vinícius Gabriel
-        </div>
-      </div>
+  <div class="quiz-container">
+    <div class="header">
+      <h2>Quiz: Polaridade e Forças Intermoleculares</h2>
+      <small>Turma: 1º DS-B</small>
     </div>
+
+    <div class="timer">⏱️ <span id="timeLeft">30</span>s</div>
+
+    <div id="quizArea">
+      <div class="question" id="questionText"></div>
+      <div class="options" id="optionsBox"></div>
+    </div>
+
+    <div class="controls">
+      <button id="prevBtn">Anterior</button>
+      <button id="nextBtn">Próxima</button>
+      <button id="finishBtn">Finalizar</button>
+      <button id="restartBtn">Reiniciar</button>
+    </div>
+
+    <div class="result" id="resultPanel">
+      <h3>Resultado Final</h3>
+      <p>Acertos: <span id="scoreText">0</span> / <span id="totalText">0</span></p>
+      <p id="percentText"></p>
+      <button class="gabarito-btn" id="showGabarito">Ver Gabarito Comentado</button>
+    </div>
+
+    <footer>
+      <p><strong>Integrantes do grupo:</strong></p>
+      <p>Alan Rodrigues • Arthur Gabriel • Carlos Henrique • Luis Fernando • Rafael França • Rikelmy Fabricio • Vinícius Gabriel</p>
+    </footer>
   </div>
 
+  <!-- Modal do gabarito -->
   <div class="overlay" id="overlay">
-    <div class="gabarito" role="dialog" aria-modal="true">
+    <div class="gabarito-modal">
       <h3>Gabarito Comentado</h3>
       <div id="gabaritoContent"></div>
-      <div style="text-align:right;margin-top:10px">
-        <button id="closeGabarito" class="secondary">Fechar</button>
-      </div>
+      <button class="close" id="closeGabarito">Fechar</button>
     </div>
   </div>
 
   <script>
-    const questions = [
-      {
-        q: "1) O que determina a polaridade de uma molécula?",
-        options: [
-          "A massa atômica dos átomos",
-          "A diferença de eletronegatividade e a geometria molecular",
-          "A quantidade de elétrons na camada de valência",
-          "A ligação iônica presente"
-        ],
-        answer: 1,
-        comment: "A polaridade depende da diferença de eletronegatividade entre os átomos e da simetria da molécula. Mesmo moléculas com ligações polares podem ser apolares se forem simétricas, como o CO₂."
-      },
-      {
-        q: "2) Qual dessas moléculas é polar?",
-        options: ["CO₂", "BF₃", "H₂O", "CH₄"],
-        answer: 2,
-        comment: "A molécula de H₂O é angular e tem átomos de oxigênio e hidrogênio com grande diferença de eletronegatividade, resultando em um dipolo permanente."
-      },
-      {
-        q: "3) As forças de London (dispersão) estão presentes em:",
-        options: ["Apenas moléculas polares", "Apenas gases nobres", "Todas as substâncias", "Somente moléculas apolares"],
-        answer: 2,
-        comment: "As forças de London atuam em TODAS as moléculas, pois são interações momentâneas entre dipolos induzidos, mas predominam em substâncias apolares."
-      },
-      {
-        q: "4) A força intermolecular mais intensa é:",
-        options: ["Dipolo induzido", "Dipolo permanente", "Ligação de hidrogênio", "Força de London"],
-        answer: 2,
-        comment: "A ligação de hidrogênio é a mais intensa, ocorrendo quando H se liga a F, O ou N — átomos muito eletronegativos."
-      },
-      {
-        q: "5) O NH₃ apresenta que tipo de força intermolecular predominante?",
-        options: ["Dipolo induzido", "London", "Dipolo-dipolo", "Ligação de hidrogênio"],
-        answer: 3,
-        comment: "O NH₃ (amônia) apresenta ligações de hidrogênio devido ao nitrogênio ligado diretamente ao hidrogênio."
-      },
-      {
-        q: "6) Qual das seguintes substâncias tem ponto de ebulição mais alto?",
-        options: ["H₂O", "H₂S", "H₂Se", "H₂Te"],
-        answer: 0,
-        comment: "A água tem o ponto de ebulição mais alto devido às fortes ligações de hidrogênio entre suas moléculas."
-      },
-      {
-        q: "7) O CH₄ é uma molécula:",
-        options: ["Polar", "Apolar", "Iônica", "Com ligação metálica"],
-        answer: 1,
-        comment: "O metano (CH₄) é apolar porque é simétrico e as polaridades das ligações se anulam."
-      },
-      {
-        q: "8) Qual força explica a existência de gases nobres líquidos em baixas temperaturas?",
-        options: ["Dipolo-dipolo", "London", "Ligação de hidrogênio", "Força metálica"],
-        answer: 1,
-        comment: "Somente as forças de dispersão (London) permitem a condensação dos gases nobres, pois são induzidas temporariamente."
-      },
-      {
-        q: "9) Em HF, qual tipo de interação intermolecular ocorre?",
-        options: ["Dipolo-dipolo", "Ligação de hidrogênio", "London", "Íon-dipolo"],
-        answer: 1,
-        comment: "O HF tem ligação de hidrogênio, já que o F é altamente eletronegativo e se liga diretamente ao H."
-      },
-      {
-        q: "10) Quanto maior a massa molecular de uma substância apolar, maior será:",
-        options: ["A polaridade", "A força de dispersão", "A ligação de hidrogênio", "A solubilidade em água"],
-        answer: 1,
-        comment: "Nas substâncias apolares, o aumento da massa molecular aumenta as forças de London e, portanto, o ponto de ebulição."
-      },
-      {
-        q: "11) Moléculas apolares dissolvem melhor em:",
-        options: ["Solventes polares", "Água", "Solventes apolares", "Bases fortes"],
-        answer: 2,
-        comment: "Regra do 'semelhante dissolve semelhante': substâncias apolares dissolvem-se em solventes apolares."
-      },
-      {
-        q: "12) Em NaCl dissolvido em água, a interação predominante é:",
-        options: ["London", "Dipolo-dipolo", "Ligação de hidrogênio", "Íon-dipolo"],
-        answer: 3,
-        comment: "O sal se dissolve na água devido à interação entre os íons (Na⁺ e Cl⁻) e o dipolo da molécula de H₂O — interação íon-dipolo."
-      },
-      {
-        q: "13) Uma substância com ligações de hidrogênio será geralmente:",
-        options: ["Mais volátil", "Mais solúvel em água", "Menos viscosa", "Menos densa"],
-        answer: 1,
-        comment: "Ligações de hidrogênio aumentam a solubilidade em água, pois formam pontes com as moléculas do solvente."
-      },
-      {
-        q: "14) Qual é o fator determinante da geometria molecular?",
-        options: ["Número de prótons", "Níveis de energia", "Repulsão entre pares de elétrons", "Diferença de massa atômica"],
-        answer: 2,
-        comment: "Segundo o modelo RPECV (VSEPR), a geometria depende da repulsão entre pares de elétrons na camada de valência."
-      },
-      {
-        q: "15) A molécula de CO₂ é apolar porque:",
-        options: [
-          "É formada apenas por ligações apolares",
-          "Tem formato angular",
-          "Os dipolos se anulam por simetria linear",
-          "O carbono é mais eletronegativo que o oxigênio"
-        ],
-        answer: 2,
-        comment: "O CO₂ é linear e as ligações C=O, embora polares, se anulam, tornando a molécula apolar."
-      }
-    ];
-
-    let current = 0;
-    let score = 0;
-    let selected = Array(questions.length).fill(null);
-
-    const qText = document.getElementById("questionText");
-    const optionsEl = document.getElementById("options");
-    const qIndex = document.getElementById("qIndex");
-    const qTotal = document.getElementById("qTotal");
-    const progBar = document.getElementById("progBar");
-
-    qTotal.textContent = questions.length;
-
-    function renderQuestion() {
-      const q = questions[current];
-      qIndex.textContent = current + 1;
-      qText.textContent = q.q;
-      optionsEl.innerHTML = "";
-      q.options.forEach((opt, i) => {
-        const div = document.createElement("div");
-        div.textContent = opt;
-        div.className = "option";
-        if (selected[current] === i) div.style.border = "2px solid var(--accent)";
-        div.onclick = () => {
-          selected[current] = i;
-          renderQuestion();
-        };
-        optionsEl.appendChild(div);
-      });
-      progBar.style.width = ((current + 1) / questions.length) * 100 + "%";
-    }
-
-    document.getElementById("nextBtn").onclick = () => {
-      if (current < questions.length - 1) { current++; renderQuestion(); }
-    };
-    document.getElementById("prevBtn").onclick = () => {
-      if (current > 0) { current--; renderQuestion(); }
-    };
-    document.getElementById("resetBtn").onclick = () => location.reload();
-
-    document.getElementById("finishBtn").onclick = () => {
-      const resultPanel = document.getElementById("resultPanel");
-      resultPanel.style.display = "block";
-      document.getElementById("quizArea").style.display = "none";
-
-      const answersList = document.getElementById("answersList");
-      const answerKey = document.getElementById("answerKey");
-      answersList.innerHTML = "";
-      answerKey.innerHTML = "";
-
-      score = 0;
-      questions.forEach((q, i) => {
-        const userAnswer = selected[i];
-        const item = document.createElement("div");
-        item.className = "item";
-        if (userAnswer === q.answer) { score++; item.style.borderLeft = "4px solid var(--correct)"; }
-        else item.style.borderLeft = "4px solid var(--wrong)";
-        item.innerHTML = `<strong>${q.q}</strong><br><em>Sua resposta:</em> ${q.options[userAnswer] || "(sem resposta)"}<br><em>Correta:</em> ${q.options[q.answer]}<br><small>${q.comment}</small>`;
-        answersList.appendChild(item);
-
-        const span = document.createElement("span");
-        span.textContent = i + 1;
-        span.style.padding = "4px 8px";
-        span.style.borderRadius = "6px";
-        span.style.background = (userspan.style.background = (userAnswer === q.answer) ? "var(--correct)" : "var(--wrong)";
-        span.style.color = "#fff";
-        answerKey.appendChild(span);
-      });
-
-      document.getElementById("scoreText").textContent = `${score} / ${questions.length}`;
-      const percent = ((score / questions.length) * 100).toFixed(1);
-      document.getElementById("percentText").textContent = `Aproveitamento: ${percent}%`;
-
-      // Gabarito comentado (modal)
-      const gabaritoContent = document.getElementById("gabaritoContent");
-      gabaritoContent.innerHTML = "";
-      questions.forEach((q, i) => {
-        const div = document.createElement("div");
-        div.className = "g-item";
-        div.innerHTML = `
-          <strong>Questão ${i + 1}:</strong> ${q.q}<br>
-          <strong>Resposta correta:</strong> ${q.options[q.answer]}<br>
-          <small><em>Comentário:</em> ${q.comment}</small>
-        `;
-        gabaritoContent.appendChild(div);
-      });
-    };
-
-    // Botões de controle pós-resultado
-    document.getElementById("backToQuestions").onclick = () => {
-      document.getElementById("resultPanel").style.display = "none";
-      document.getElementById("quizArea").style.display = "block";
-    };
-
-    document.getElementById("openGabarito").onclick = () => {
-      document.getElementById("overlay").style.display = "flex";
-    };
-    document.getElementById("closeGabarito").onclick = () => {
-      document.getElementById("overlay").style.display = "none";
-    };
-
-    // Timer simples por questão (reinicia a cada mudança)
-    let timer = 30;
-    const timeLeftEl = document.getElementById("timeLeft");
-    setInterval(() => {
-      if (document.getElementById("quizArea").style.display !== "none") {
-        timer--;
-        if (timer <= 0) {
-          timer = 30;
-          if (current < questions.length - 1) {
-            current++;
-            renderQuestion();
-          }
+    document.addEventListener("DOMContentLoaded", () => {
+      const questions = [
+        {
+          q: "Qual tipo de força intermolecular ocorre entre moléculas apolares?",
+          options: ["Dipolo permanente", "Dipolo induzido", "Ligação de hidrogênio", "Força iônica"],
+          answer: 1,
+          comment: "Entre moléculas apolares, predominam forças de dispersão ou dipolo induzido."
+        },
+        {
+          q: "A molécula de H₂O é polar porque:",
+          options: ["Os átomos são iguais", "A geometria é linear", "A distribuição de cargas é assimétrica", "Não há elétrons compartilhados"],
+          answer: 2,
+          comment: "A água é polar porque a molécula tem formato angular e distribuição desigual de elétrons."
         }
-        timeLeftEl.textContent = timer;
-      }
-    }, 1000);
+        // 🔹 Você pode adicionar mais perguntas seguindo o mesmo padrão
+      ];
 
-    // Início do quiz
-    renderQuestion();
+      let current = 0;
+      let score = 0;
+      let answers = [];
+      let timer = 30;
+      let interval;
+
+      const questionText = document.getElementById("questionText");
+      const optionsBox = document.getElementById("optionsBox");
+      const timeLeft = document.getElementById("timeLeft");
+      const resultPanel = document.getElementById("resultPanel");
+      const scoreText = document.getElementById("scoreText");
+      const totalText = document.getElementById("totalText");
+      const percentText = document.getElementById("percentText");
+      const overlay = document.getElementById("overlay");
+      const gabaritoContent = document.getElementById("gabaritoContent");
+
+      const renderQuestion = () => {
+        const q = questions[current];
+        questionText.textContent = `${current + 1}. ${q.q}`;
+        optionsBox.innerHTML = "";
+        q.options.forEach((opt, i) => {
+          const btn = document.createElement("button");
+          btn.textContent = opt;
+          btn.onclick = () => {
+            answers[current] = i;
+            if (i === q.answer) score++;
+            nextQuestion();
+          };
+          optionsBox.appendChild(btn);
+        });
+        resetTimer();
+      };
+
+      const resetTimer = () => {
+        clearInterval(interval);
+        timer = 30;
+        timeLeft.textContent = timer;
+        interval = setInterval(() => {
+          timer--;
+          timeLeft.textContent = timer;
+          if (timer <= 0) nextQuestion();
+        }, 1000);
+      };
+
+      const nextQuestion = () => {
+        clearInterval(interval);
+        if (current < questions.length - 1) {
+          current++;
+          renderQuestion();
+        } else {
+          showResult();
+        }
+      };
+
+      const prevQuestion = () => {
+        if (current > 0) {
+          current--;
+          renderQuestion();
+        }
+      };
+
+      const showResult = () => {
+        clearInterval(interval);
+        document.getElementById("quizArea").style.display = "none";
+        resultPanel.style.display = "block";
+        scoreText.textContent = score;
+        totalText.textContent = questions.length;
+        const percent = ((score / questions.length) * 100).toFixed(1);
+        percentText.textContent = `Aproveitamento: ${percent}%`;
+
+        gabaritoContent.innerHTML = "";
+        questions.forEach((q, i) => {
+          const div = document.createElement("div");
+          div.className = "g-item";
+          div.innerHTML = `
+            <strong>Questão ${i + 1}:</strong> ${q.q}<br>
+            <strong>Correta:</strong> ${q.options[q.answer]}<br>
+            <em>${q.comment}</em>
+          `;
+          gabaritoContent.appendChild(div);
+        });
+      };
+
+      document.getElementById("nextBtn").onclick = nextQuestion;
+      document.getElementById("prevBtn").onclick = prevQuestion;
+      document.getElementById("finishBtn").onclick = showResult;
+      document.getElementById("restartBtn").onclick = () => location.reload();
+      document.getElementById("showGabarito").onclick = () => overlay.style.display = "flex";
+      document.getElementById("closeGabarito").onclick = () => overlay.style.display = "none";
+
+      renderQuestion();
+    });
   </script>
 </body>
 </html>
