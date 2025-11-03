@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz de Polaridade e Forças Intermoleculares</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #0d47a1, #1976d2);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      flex-direction: column;
+      text-align: center;
+    }
+    #quiz-container {
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      padding: 30px;
+      width: 90%;
+      max-width: 700px;
+      box-shadow: 0 4px 30px rgba(0,0,0,0.2);
+      animation: fadeIn 0.6s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+    button {
+      background-color: #2196f3;
+      border: none;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 10px;
+      transition: 0.3s;
+    }
+    button:hover {background-color: #0b79d0;}
+    .option {
+      background-color: rgba(255,255,255,0.15);
+      margin: 5px 0;
+      border-radius: 8px;
+      padding: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .option:hover {background-color: rgba(255,255,255,0.3);}
+    .correct {background-color: #4caf50 !important;}
+    .incorrect {background-color: #f44336 !important;}
+    #timer {font-weight: bold; margin-bottom: 10px;}
+    #result {margin-top: 20px;}
+    @media (max-width: 600px){
+      #quiz-container {padding: 20px; font-size: 15px;}
+      button {width: 100%;}
+    }
+  </style>
+</head>
+<body>
+  <div id="quiz-container">
+    <h2>Quiz: Polaridade e Forças Intermoleculares</h2>
+    <div id="timer">⏱ Tempo: <span id="time">30</span>s</div>
+    <div id="question"></div>
+    <div id="options"></div>
+    <button id="next-btn">Próxima</button>
+    <div id="result"></div>
+  </div>
+  <script>
+    const quiz = [
+      {q: '1. Sobre a polaridade das moléculas, é correto afirmar:', options: ['Toda molécula que possui ligações polares é polar.','Uma molécula apolar não pode ter ligações polares.','A geometria molecular é um fator crucial para determinar a polaridade.','Moléculas diatômicas formadas por átomos iguais são sempre polares.'], correct: 2, explanation: 'Moléculas com ligações polares podem ser apolares se a geometria for simétrica, como no CO₂.'},
+      {q: '2. Qual das moléculas abaixo é APOLAR?', options: ['HCl','H₂O','NH₃','CO₂'], correct: 3, explanation: 'O CO₂ é linear e simétrico, cancelando os dipolos das ligações C=O.'},
+      {q: '3. A água (H₂O) é uma molécula polar. Isso se deve principalmente:', options: ['À sua baixa massa molecular.','À sua geometria linear e à diferença de eletronegatividade entre H e O.','À sua geometria angular e à diferença de eletronegatividade entre H e O.','Ao fato de ser formada apenas por não-metais.'], correct: 2, explanation: 'A geometria angular impede o cancelamento do dipolo resultante.'},
+      {q: '4. As forças intermoleculares do tipo Dipolo-Dipolo são características de:', options: ['Qualquer substância molecular.','Substâncias iônicas.','Substâncias metálicas.','Substâncias polares no estado sólido ou líquido.'], correct: 3, explanation: 'As forças dipolo-dipolo atuam entre moléculas polares próximas.'},
+      {q: '5. Qual o tipo de força intermolecular predominante no gás cloro (Cl₂)?', options: ['Ligação de Hidrogênio','Forças de Dipolo-Dipolo','Forças de London (Dispersão)','Ligação Iônica'], correct: 2, explanation: 'O Cl₂ é uma molécula apolar, portanto a única força presente é a de London.'},
+      {q: '6. A anomalia do ponto de ebulição da água é explicada:', options: ['Pela sua baixa densidade no estado sólido.','Pelas forças de dipolo induzido.','Pelas forças de dipolo-dipolo comuns.','Pelas forças de ligação de hidrogênio.'], correct: 3, explanation: 'A ligação de hidrogênio é uma força intermolecular excepcionalmente forte.'},
+      {q: '7. Analise: I. HCl / II. H₂O / III. NaCl. Ordem crescente de força:', options: ['I < II < III','II < I < III','III < I < II','I < III < II'], correct: 0, explanation: 'HCl (dipolo-dipolo) < H₂O (ligação de hidrogênio) < NaCl (ligação iônica, muito forte).'},
+      {q: '8. Qual das alternativas apresenta uma reação de SIMPLES TROCA?', options: ['HCl + NaOH → NaCl + H₂O','2 H₂O → 2 H₂ + O₂','Fe + 2 HCl → FeCl₂ + H₂','CO₂ + H₂O → H₂CO₃'], correct: 2, explanation: 'Um elemento (Fe) troca de lugar com outro em um composto (HCl).'},
+      {q: '9. Na reação Zn + 2AgNO₃ → 2Ag + Zn(NO₃)₂, o elemento oxidado é:', options: ['O Zinco (Zn)','A Prata (Ag)','O Nitrogênio (N)','O Oxigênio (O)'], correct: 0, explanation: 'O Zn perde elétrons, indo de NOX 0 para +2, caracterizando oxidação.'},
+      {q: '10. A reação CaO + H₂O → Ca(OH)₂ é:', options: ['Decomposição','Dupla Troca','Síntese ou Adição','Simples Troca'], correct: 2, explanation: 'Duas substâncias se combinam para formar um único produto.'},
+      {q: '11. Qual molécula é mais polar?', options: ['CH₄','CCl₄','CH₃Cl','CO₂'], correct: 2, explanation: 'A molécula é assimétrica devido ao átomo de Cl, resultando em um dipolo resultante significativo.'},
+      {q: '12. O CO₂ é apolar porque:', options: ['É formada por elementos com eletronegatividades iguais.','Possui geometria linear e os dipolos das ligações C=O se anulam.','É um gás à temperatura ambiente.','Suas ligações são todas covalentes apolares.'], correct: 1, explanation: 'Geometria linear faz com que os dipolos se anulem.'},
+      {q: '13. O álcool etílico tem ponto de ebulição maior que o éter dimetílico porque:', options: ['Possui ligações iônicas.','É apolar.','Apresenta ligações de hidrogênio.','Possui mais átomos de carbono.'], correct: 2, explanation: 'O álcool tem grupo OH, capaz de formar ligação de hidrogênio, enquanto o éter não.'},
+      {q: '14. A formação do sólido branco (AgCl) é chamada de:', options: ['Precipitado','Efervescência','Solução','Gás'], correct: 0, explanation: 'O sólido insolúvel formado é chamado de precipitado.'},
+      {q: '15. O metano é gás e a água é líquida porque:', options: ['O metano possui ligações iônicas.','As forças no metano (London) são mais fortes.','As forças na água (H-ligação) são muito mais fortes.','A água se decompõe facilmente.'], correct: 2, explanation: 'Forças de hidrogênio na água são muito mais fortes, elevando o ponto de ebulição.'}
+    ];
+
+    let current = 0;
+    let score = 0;
+    let timer;
+    let timeLeft = 30;
+
+    const questionEl = document.getElementById('question');
+    const optionsEl = document.getElementById('options');
+    const nextBtn = document.getElementById('next-btn');
+    const resultEl = document.getElementById('result');
+    const timeEl = document.getElementById('time');
+
+    function startTimer() {
+      timeLeft = 30;
+      timeEl.textContent = timeLeft;
+      timer = setInterval(() => {
+        timeLeft--;
+        timeEl.textContent = timeLeft;
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          nextQuestion();
+        }
+      }, 1000);
+    }
+
+    function showQuestion() {
+      clearInterval(timer);
+      startTimer();
+      let q = quiz[current];
+      questionEl.textContent = q.q;
+      optionsEl.innerHTML = '';
+      q.options.forEach((opt, i) => {
+        let div = document.createElement('div');
+        div.textContent = opt;
+        div.classList.add('option');
+        div.onclick = () => selectOption(i, div);
+        optionsEl.appendChild(div);
+      });
+      resultEl.textContent = '';
+    }
+
+    function selectOption(i, el) {
+      clearInterval(timer);
+      const q = quiz[current];
+      const options = document.querySelectorAll('.option');
+      options.forEach(opt => opt.style.pointerEvents = 'none');
+      if (i === q.correct) {
+        el.classList.add('correct');
+        score++;
+        resultEl.innerHTML = `✅ Correto!<br><small>${q.explanation}</small>`;
+      } else {
+        el.classList.add('incorrect');
+        options[q.correct].classList.add('correct');
+        resultEl.innerHTML = `❌ Incorreto.<br><small>${q.explanation}</small>`;
+      }
+    }
+
+    function nextQuestion() {
+      current++;
+      if (current < quiz.length) {
+        showQuestion();
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      clearInterval(timer);
+      document.getElementById('timer').style.display = 'none';
+      questionEl.textContent = `Você acertou ${score} de ${quiz.length} questões!`;
+      optionsEl.innerHTML = '<p>Parabéns pela participação!</p>';
+      nextBtn.style.display = 'none';
+      resultEl.innerHTML = `<hr><strong>Integrantes:</strong><br>Vinícius Gabriel, Alan Rodrigues, Carlos Henrique, Rikelmy Fabricio, Arthur Gabriel, Rafael França, Luis Fernando<br><br><strong>Turma:</strong> 1º DS-B`;
+    }
+
+    nextBtn.onclick = nextQuestion;
+    showQuestion();
+  </script>
+</body>
+</html>
