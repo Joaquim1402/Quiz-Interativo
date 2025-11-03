@@ -1,322 +1,580 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Quiz de Polaridade e Forças Intermoleculares</title>
-
-  <style>
-    :root {
-      --primary: #007bff;
-      --correct: #28a745;
-      --wrong: #dc3545;
-      --bg: #e9f2ff;
-    }
-
-    body {
-      font-family: "Poppins", sans-serif;
-      background: var(--bg);
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      min-height: 100vh;
-      margin: 0;
-      padding: 20px;
-    }
-
-    .quiz-container {
-      background: #fff;
-      padding: 25px;
-      border-radius: 20px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      width: 100%;
-      max-width: 420px;
-    }
-
-    .header {
-      text-align: center;
-      margin-bottom: 15px;
-    }
-
-    .header h2 {
-      color: var(--primary);
-      margin-bottom: 5px;
-    }
-
-    .header small {
-      color: #555;
-    }
-
-    .question {
-      font-weight: 600;
-      margin-bottom: 15px;
-    }
-
-    .options button {
-      display: block;
-      width: 100%;
-      margin: 6px 0;
-      padding: 10px;
-      border: 2px solid #ddd;
-      background: #f8f9fa;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: all 0.3s;
-      font-size: 15px;
-    }
-
-    .options button:hover {
-      background: #e6f0ff;
-      border-color: var(--primary);
-    }
-
-    .controls {
-      text-align: center;
-      margin-top: 10px;
-    }
-
-    .controls button {
-      margin: 5px;
-      padding: 8px 16px;
-      border-radius: 10px;
-      border: none;
-      cursor: pointer;
-      font-weight: 500;
-      background: var(--primary);
-      color: #fff;
-    }
-
-    .controls button:disabled {
-      background: #ccc;
-      cursor: not-allowed;
-    }
-
-    .timer {
-      text-align: right;
-      color: #333;
-      font-weight: 500;
-      margin-bottom: 10px;
-    }
-
-    .result {
-      display: none;
-      text-align: center;
-    }
-
-    .result h3 {
-      color: var(--primary);
-    }
-
-    .gabarito-btn {
-      background: #17a2b8;
-    }
-
-    footer {
-      margin-top: 15px;
-      font-size: 14px;
-      text-align: center;
-      color: #444;
-    }
-
-    .overlay {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.6);
-      justify-content: center;
-      align-items: center;
-      z-index: 10;
-    }
-
-    .gabarito-modal {
-      background: #fff;
-      border-radius: 15px;
-      padding: 20px;
-      width: 90%;
-      max-width: 500px;
-      max-height: 80vh;
-      overflow-y: auto;
-    }
-
-    .gabarito-modal h3 {
-      color: var(--primary);
-      text-align: center;
-    }
-
-    .g-item {
-      border-bottom: 1px solid #ccc;
-      margin-bottom: 10px;
-      padding-bottom: 10px;
-    }
-
-    .close {
-      display: block;
-      text-align: center;
-      background: var(--wrong);
-      color: #fff;
-      border: none;
-      padding: 8px 15px;
-      margin: 10px auto 0;
-      border-radius: 10px;
-      cursor: pointer;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz de Química - Polaridade e Reações</title>
+    <style>
+        :root {
+            --azul-primario: #1e3a8a;
+            --azul-secundario: #3b82f6;
+            --azul-claro: #dbeafe;
+            --azul-escuro: #1e40af;
+            --branco: #ffffff;
+            --cinza-claro: #f3f4f6;
+            --cinza-escuro: #4b5563;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--cinza-claro);
+            color: var(--cinza-escuro);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: var(--azul-primario);
+            color: var(--branco);
+            padding: 30px 0;
+            text-align: center;
+            border-radius: 10px 10px 0 0;
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .intro {
+            background-color: var(--branco);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .quiz-container {
+            background-color: var(--branco);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .pergunta {
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--cinza-claro);
+        }
+        
+        .pergunta:last-child {
+            border-bottom: none;
+        }
+        
+        .pergunta h3 {
+            color: var(--azul-primario);
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+        
+        .alternativas {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .alternativa {
+            display: flex;
+            align-items: flex-start;
+            padding: 10px;
+            border: 1px solid var(--cinza-claro);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .alternativa:hover {
+            background-color: var(--azul-claro);
+            border-color: var(--azul-secundario);
+        }
+        
+        .alternativa.selecionada {
+            background-color: var(--azul-claro);
+            border-color: var(--azul-secundario);
+        }
+        
+        .alternativa input {
+            margin-right: 10px;
+            margin-top: 3px;
+        }
+        
+        .botao-container {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+        }
+        
+        button {
+            background-color: var(--azul-primario);
+            color: var(--branco);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: var(--azul-escuro);
+        }
+        
+        .resultado {
+            background-color: var(--branco);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: none;
+        }
+        
+        .resultado h2 {
+            color: var(--azul-primario);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .pontuacao {
+            font-size: 1.3rem;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--azul-primario);
+        }
+        
+        .gabarito {
+            margin-top: 30px;
+        }
+        
+        .gabarito h3 {
+            color: var(--azul-primario);
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--cinza-claro);
+            padding-bottom: 10px;
+        }
+        
+        .item-gabarito {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: var(--azul-claro);
+            border-radius: 5px;
+        }
+        
+        .item-gabarito h4 {
+            color: var(--azul-escuro);
+            margin-bottom: 8px;
+        }
+        
+        .explicacao {
+            font-style: italic;
+            color: var(--cinza-escuro);
+            margin-top: 8px;
+        }
+        
+        .integrantes {
+            background-color: var(--branco);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .integrantes h3 {
+            color: var(--azul-primario);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .lista-integrantes {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+        }
+        
+        .integrante {
+            padding: 8px;
+            text-align: center;
+            background-color: var(--azul-claro);
+            border-radius: 5px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--cinza-escuro);
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .lista-integrantes {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
-
 <body>
-  <div class="quiz-container">
-    <div class="header">
-      <h2>Quiz: Polaridade e Forças Intermoleculares</h2>
-      <small>Turma: 1º DS-B</small>
+    <div class="container">
+        <header>
+            <h1>Quiz de Química</h1>
+            <p>Polaridade Molecular e Reações Químicas</p>
+        </header>
+        
+        <section class="intro">
+            <h2>Bem-vindo ao Quiz!</h2>
+            <p>Teste seus conhecimentos sobre polaridade molecular, forças intermoleculares e reações químicas. Responda todas as 15 questões e verifique seu desempenho no final.</p>
+        </section>
+        
+        <section class="quiz-container">
+            <form id="quiz-form">
+                <!-- As questões serão inseridas aqui pelo JavaScript -->
+            </form>
+            
+            <div class="botao-container">
+                <button type="button" id="enviar-respostas">Enviar Respostas</button>
+            </div>
+        </section>
+        
+        <section class="resultado" id="resultado">
+            <h2>Resultado do Quiz</h2>
+            <div class="pontuacao" id="pontuacao"></div>
+            
+            <div class="gabarito" id="gabarito">
+                <h3>Gabarito Comentado</h3>
+                <!-- O gabarito será inserido aqui pelo JavaScript -->
+            </div>
+        </section>
+        
+        <section class="integrantes">
+            <h3>Integrantes do Grupo</h3>
+            <div class="lista-integrantes">
+                <div class="integrante">Alan Rodrigues</div>
+                <div class="integrante">Arthur Gabriel</div>
+                <div class="integrante">Carlos Henrique</div>
+                <div class="integrante">Luis Fernando</div>
+                <div class="integrante">Rafael França</div>
+                <div class="integrante">Rikelmy Fabricio</div>
+                <div class="integrante">Vinícius Gabriel</div>
+            </div>
+            <p style="text-align: center; margin-top: 15px;">Turma: 1º DS-B</p>
+        </section>
+        
+        <footer>
+            <p>&copy; Quiz desenvolvido para estudo de Química - 2025</p>
+        </footer>
     </div>
 
-    <div class="timer">⏱️ <span id="timeLeft">30</span>s</div>
+    <script>
+        // Dados das questões
+        const questoes = [
+            {
+                pergunta: "1. Sobre a polaridade das moléculas, é correto afirmar:",
+                alternativas: [
+                    "a) Toda molécula que possui ligações polares é polar.",
+                    "b) Uma molécula apolar não pode ter ligações polares.",
+                    "c) A geometria molecular é um fator crucial para determinar a polaridade.",
+                    "d) Moléculas diatômicas formadas por átomos iguais são sempre polares."
+                ],
+                respostaCorreta: 2,
+                explicacao: "A geometria molecular é um fator crucial para determinar a polaridade. Moléculas com ligações polares podem ser apolares se a geometria for simétrica, como no CO₂."
+            },
+            {
+                pergunta: "2. Qual das moléculas abaixo é APOLAR?",
+                alternativas: [
+                    "a) HCl",
+                    "b) H₂O",
+                    "c) NH₃",
+                    "d) CO₂"
+                ],
+                respostaCorreta: 3,
+                explicacao: "O CO₂ é linear e simétrico, cancelando os dipolos das ligações C=O."
+            },
+            {
+                pergunta: "3. A água (H₂O) é uma molécula polar. Isso se deve principalmente:",
+                alternativas: [
+                    "a) À sua baixa massa molecular.",
+                    "b) À sua geometria linear e à diferença de eletronegatividade entre H e O.",
+                    "c) À sua geometria angular e à diferença de eletronegatividade entre H e O.",
+                    "d) Ao fato de ser formada apenas por não-metais."
+                ],
+                respostaCorreta: 2,
+                explicacao: "A geometria angular impede o cancelamento do dipolo resultante."
+            },
+            {
+                pergunta: "4. As forças intermoleculares do tipo Dipolo-Dipolo são características de:",
+                alternativas: [
+                    "a) Qualquer substância molecular.",
+                    "b) Substâncias iônicas.",
+                    "c) Substâncias metálicas.",
+                    "d) Substâncias polares no estado sólido ou líquido."
+                ],
+                respostaCorreta: 3,
+                explicacao: "As forças dipolo-dipolo atuam entre moléculas polares próximas."
+            },
+            {
+                pergunta: "5. Qual o tipo de força intermolecular predominante no gás cloro (Cl₂)?",
+                alternativas: [
+                    "a) Ligação de Hidrogênio",
+                    "b) Forças de Dipolo-Dipolo",
+                    "c) Forças de London (Dispersão)",
+                    "d) Ligação Iônica"
+                ],
+                respostaCorreta: 2,
+                explicacao: "O Cl₂ é uma molécula apolar, portanto a única força presente é a de London."
+            },
+            {
+                pergunta: "6. A anomalia do ponto de ebulição da água, que é significativamente alto para sua massa molecular, é explicada:",
+                alternativas: [
+                    "a) Pela sua baixa densidade no estado sólido.",
+                    "b) Pelas forças de dipolo induzido.",
+                    "c) Pelas forças de dipolo-dipolo comuns.",
+                    "d) Pelas forças de ligação de hidrogênio."
+                ],
+                respostaCorreta: 3,
+                explicacao: "A ligação de hidrogênio é uma força intermolecular excepcionalmente forte."
+            },
+            {
+                pergunta: "7. Analise as substâncias: I. HCl / II. H₂O / III. NaCl. A ordem CRESCENTE de força de atração entre suas partículas é:",
+                alternativas: [
+                    "a) I < II < III",
+                    "b) II < I < III",
+                    "c) III < I < II",
+                    "d) I < III < II"
+                ],
+                respostaCorreta: 0,
+                explicacao: "HCl (dipolo-dipolo) < H₂O (ligação de hidrogênio) < NaCl (ligação iônica, muito forte)."
+            },
+            {
+                pergunta: "8. Qual das alternativas apresenta uma reação de SIMPLES TROCA?",
+                alternativas: [
+                    "a) HCl + NaOH → NaCl + H₂O",
+                    "b) 2 H₂O → 2 H₂ + O₂",
+                    "c) Fe + 2 HCl → FeCl₂ + H₂",
+                    "d) CO₂ + H₂O → H₂CO₃"
+                ],
+                respostaCorreta: 2,
+                explicacao: "Um elemento (Fe) troca de lugar com outro em um composto (HCl)."
+            },
+            {
+                pergunta: "9. Na reação: Zn + 2 AgNO₃ → 2 Ag + Zn(NO₃)₂, o elemento que sofre oxidação é:",
+                alternativas: [
+                    "a) O Zinco (Zn)",
+                    "b) A Prata (Ag)",
+                    "c) O Nitrogênio (N)",
+                    "d) O Oxigênio (O)"
+                ],
+                respostaCorreta: 0,
+                explicacao: "O Zn perde elétrons, indo de NOX 0 para +2, caracterizando oxidação."
+            },
+            {
+                pergunta: "10. A reação: CaO + H₂O → Ca(OH)₂ é um exemplo clássico de:",
+                alternativas: [
+                    "a) Reação de Decomposição",
+                    "b) Reação de Dupla Troca",
+                    "c) Reação de Síntese ou Adição",
+                    "d) Reação de Simples Troca"
+                ],
+                respostaCorreta: 2,
+                explicacao: "Duas substâncias se combinam para formar um único produto."
+            },
+            {
+                pergunta: "11. Qual das moléculas a seguir é a MAIS POLAR?",
+                alternativas: [
+                    "a) CH₄ (geometria tetraédrica)",
+                    "b) CCl₄ (geometria tetraédrica)",
+                    "c) CH₃Cl (tetraédrica com ligações C-Cl e C-H)",
+                    "d) CO₂ (geometria linear)"
+                ],
+                respostaCorreta: 2,
+                explicacao: "A molécula é assimétrica devido ao átomo de Cl, resultando em um dipolo resultante significativo."
+            },
+            {
+                pergunta: "12. O dióxido de carbono (CO₂) é uma molécula apolar porque:",
+                alternativas: [
+                    "a) É formada por carbono e oxigênio, que têm eletronegatividades iguais.",
+                    "b) Possui geometria linear e os dipolos das ligações C=O se anulam.",
+                    "c) É um gás à temperatura ambiente.",
+                    "d) Suas ligações são todas covalentes apolares."
+                ],
+                respostaCorreta: 1,
+                explicacao: "Esta é a definição correta para a apolaridade do CO₂."
+            },
+            {
+                pergunta: "13. O ponto de ebulição do álcool etílico (C₂H₅OH) é maior que o do éter dimetílico (CH₃-O-CH₃), mesmo ambos tendo a mesma massa molecular. Isso se deve ao fato de que o álcool:",
+                alternativas: [
+                    "a) Possui ligações iônicas.",
+                    "b) É uma molécula apolar.",
+                    "c) Apresenta ligações de hidrogênio.",
+                    "d) Possui mais átomos de carbono."
+                ],
+                respostaCorreta: 2,
+                explicacao: "O álcool tem grupo OH, capaz de formar ligação de hidrogênio, enquanto o éter, não."
+            },
+            {
+                pergunta: "14. Em uma reação de Dupla Troca, como: AgNO₃(aq) + NaCl(aq) → AgCl(s) + NaNO₃(aq), a formação do sólido branco (AgCl) é chamada de:",
+                alternativas: [
+                    "a) Precipitado.",
+                    "b) Efervescência.",
+                    "c) Solução.",
+                    "d) Gás."
+                ],
+                respostaCorreta: 0,
+                explicacao: "O sólido insolúvel que se forma é chamado de precipitado."
+            },
+            {
+                pergunta: "15. O metano (CH₄) é um gás à temperatura ambiente, enquanto a água (H₂O) é um líquido. A melhor explicação para essa diferença, considerando que a massa molecular da água é menor, é:",
+                alternativas: [
+                    "a) O metano possui ligações iônicas mais fortes.",
+                    "b) As forças intermoleculares no metano (London) são mais fortes que as ligações de hidrogênio na água.",
+                    "c) As forças intermoleculares na água (ligação de hidrogênio) são muito mais fortes que as do metano (London).",
+                    "d) A água se decompõe facilmente."
+                ],
+                respostaCorreta: 2,
+                explicacao: "Forças intermoleculares mais fortes exigem mais energia para vencer, elevando o ponto de ebulição."
+            }
+        ];
 
-    <div id="quizArea">
-      <div class="question" id="questionText"></div>
-      <div class="options" id="optionsBox"></div>
-    </div>
-
-    <div class="controls">
-      <button id="prevBtn">Anterior</button>
-      <button id="nextBtn">Próxima</button>
-      <button id="finishBtn">Finalizar</button>
-      <button id="restartBtn">Reiniciar</button>
-    </div>
-
-    <div class="result" id="resultPanel">
-      <h3>Resultado Final</h3>
-      <p>Acertos: <span id="scoreText">0</span> / <span id="totalText">0</span></p>
-      <p id="percentText"></p>
-      <button class="gabarito-btn" id="showGabarito">Ver Gabarito Comentado</button>
-    </div>
-
-    <footer>
-      <p><strong>Integrantes do grupo:</strong></p>
-      <p>Alan Rodrigues • Arthur Gabriel • Carlos Henrique • Luis Fernando • Rafael França • Rikelmy Fabricio • Vinícius Gabriel</p>
-    </footer>
-  </div>
-
-  <!-- Modal do gabarito -->
-  <div class="overlay" id="overlay">
-    <div class="gabarito-modal">
-      <h3>Gabarito Comentado</h3>
-      <div id="gabaritoContent"></div>
-      <button class="close" id="closeGabarito">Fechar</button>
-    </div>
-  </div>
-
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const questions = [
-        {
-          q: "Qual tipo de força intermolecular ocorre entre moléculas apolares?",
-          options: ["Dipolo permanente", "Dipolo induzido", "Ligação de hidrogênio", "Força iônica"],
-          answer: 1,
-          comment: "Entre moléculas apolares, predominam forças de dispersão ou dipolo induzido."
-        },
-        {
-          q: "A molécula de H₂O é polar porque:",
-          options: ["Os átomos são iguais", "A geometria é linear", "A distribuição de cargas é assimétrica", "Não há elétrons compartilhados"],
-          answer: 2,
-          comment: "A água é polar porque a molécula tem formato angular e distribuição desigual de elétrons."
+        // Função para criar o formulário do quiz
+        function criarQuiz() {
+            const quizForm = document.getElementById('quiz-form');
+            
+            questoes.forEach((questao, index) => {
+                const perguntaDiv = document.createElement('div');
+                perguntaDiv.className = 'pergunta';
+                
+                const perguntaTitulo = document.createElement('h3');
+                perguntaTitulo.textContent = questao.pergunta;
+                perguntaDiv.appendChild(perguntaTitulo);
+                
+                const alternativasDiv = document.createElement('div');
+                alternativasDiv.className = 'alternativas';
+                
+                questao.alternativas.forEach((alternativa, altIndex) => {
+                    const alternativaLabel = document.createElement('label');
+                    alternativaLabel.className = 'alternativa';
+                    
+                    const input = document.createElement('input');
+                    input.type = 'radio';
+                    input.name = `questao-${index}`;
+                    input.value = altIndex;
+                    
+                    alternativaLabel.appendChild(input);
+                    alternativaLabel.appendChild(document.createTextNode(alternativa));
+                    
+                    // Adicionar evento de clique para selecionar a alternativa
+                    alternativaLabel.addEventListener('click', function() {
+                        // Remover seleção de outras alternativas da mesma pergunta
+                        const todasAlternativas = alternativasDiv.querySelectorAll('.alternativa');
+                        todasAlternativas.forEach(alt => alt.classList.remove('selecionada'));
+                        
+                        // Selecionar a alternativa clicada
+                        this.classList.add('selecionada');
+                        input.checked = true;
+                    });
+                    
+                    alternativasDiv.appendChild(alternativaLabel);
+                });
+                
+                perguntaDiv.appendChild(alternativasDiv);
+                quizForm.appendChild(perguntaDiv);
+            });
         }
-        // 🔹 Você pode adicionar mais perguntas seguindo o mesmo padrão
-      ];
 
-      let current = 0;
-      let score = 0;
-      let answers = [];
-      let timer = 30;
-      let interval;
+        // Função para calcular a pontuação e exibir o resultado
+        function calcularResultado() {
+            let acertos = 0;
+            const respostasUsuario = [];
+            
+            // Coletar respostas do usuário
+            questoes.forEach((questao, index) => {
+                const respostaSelecionada = document.querySelector(`input[name="questao-${index}"]:checked`);
+                const respostaIndex = respostaSelecionada ? parseInt(respostaSelecionada.value) : -1;
+                respostasUsuario.push(respostaIndex);
+                
+                // Verificar se a resposta está correta
+                if (respostaIndex === questao.respostaCorreta) {
+                    acertos++;
+                }
+            });
+            
+            // Exibir resultado
+            const resultadoDiv = document.getElementById('resultado');
+            const pontuacaoDiv = document.getElementById('pontuacao');
+            const gabaritoDiv = document.getElementById('gabarito');
+            
+            pontuacaoDiv.textContent = `Você acertou ${acertos} de ${questoes.length} questões (${Math.round((acertos/questoes.length)*100)}%)`;
+            
+            // Limpar gabarito anterior
+            gabaritoDiv.innerHTML = '<h3>Gabarito Comentado</h3>';
+            
+            // Adicionar gabarito comentado
+            questoes.forEach((questao, index) => {
+                const itemGabarito = document.createElement('div');
+                itemGabarito.className = 'item-gabarito';
+                
+                const perguntaTitulo = document.createElement('h4');
+                perguntaTitulo.textContent = questao.pergunta;
+                itemGabarito.appendChild(perguntaTitulo);
+                
+                const respostaCorreta = document.createElement('p');
+                respostaCorreta.innerHTML = `<strong>Resposta correta:</strong> ${questao.alternativas[questao.respostaCorreta]}`;
+                itemGabarito.appendChild(respostaCorreta);
+                
+                // Verificar se o usuário acertou
+                const respostaUsuario = respostasUsuario[index];
+                const statusResposta = document.createElement('p');
+                if (respostaUsuario === -1) {
+                    statusResposta.innerHTML = '<strong>Sua resposta:</strong> Não respondida';
+                    statusResposta.style.color = 'orange';
+                } else if (respostaUsuario === questao.respostaCorreta) {
+                    statusResposta.innerHTML = '<strong>Sua resposta:</strong> Correta ✓';
+                    statusResposta.style.color = 'green';
+                } else {
+                    statusResposta.innerHTML = `<strong>Sua resposta:</strong> ${questao.alternativas[respostaUsuario]} ✗`;
+                    statusResposta.style.color = 'red';
+                }
+                itemGabarito.appendChild(statusResposta);
+                
+                const explicacao = document.createElement('p');
+                explicacao.className = 'explicacao';
+                explicacao.innerHTML = `<strong>Explicação:</strong> ${questao.explicacao}`;
+                itemGabarito.appendChild(explicacao);
+                
+                gabaritoDiv.appendChild(itemGabarito);
+            });
+            
+            // Exibir resultado
+            resultadoDiv.style.display = 'block';
+            resultadoDiv.scrollIntoView({ behavior: 'smooth' });
+        }
 
-      const questionText = document.getElementById("questionText");
-      const optionsBox = document.getElementById("optionsBox");
-      const timeLeft = document.getElementById("timeLeft");
-      const resultPanel = document.getElementById("resultPanel");
-      const scoreText = document.getElementById("scoreText");
-      const totalText = document.getElementById("totalText");
-      const percentText = document.getElementById("percentText");
-      const overlay = document.getElementById("overlay");
-      const gabaritoContent = document.getElementById("gabaritoContent");
-
-      const renderQuestion = () => {
-        const q = questions[current];
-        questionText.textContent = `${current + 1}. ${q.q}`;
-        optionsBox.innerHTML = "";
-        q.options.forEach((opt, i) => {
-          const btn = document.createElement("button");
-          btn.textContent = opt;
-          btn.onclick = () => {
-            answers[current] = i;
-            if (i === q.answer) score++;
-            nextQuestion();
-          };
-          optionsBox.appendChild(btn);
+        // Inicializar o quiz quando a página carregar
+        document.addEventListener('DOMContentLoaded', function() {
+            criarQuiz();
+            
+            // Adicionar evento ao botão de enviar
+            document.getElementById('enviar-respostas').addEventListener('click', calcularResultado);
         });
-        resetTimer();
-      };
-
-      const resetTimer = () => {
-        clearInterval(interval);
-        timer = 30;
-        timeLeft.textContent = timer;
-        interval = setInterval(() => {
-          timer--;
-          timeLeft.textContent = timer;
-          if (timer <= 0) nextQuestion();
-        }, 1000);
-      };
-
-      const nextQuestion = () => {
-        clearInterval(interval);
-        if (current < questions.length - 1) {
-          current++;
-          renderQuestion();
-        } else {
-          showResult();
-        }
-      };
-
-      const prevQuestion = () => {
-        if (current > 0) {
-          current--;
-          renderQuestion();
-        }
-      };
-
-      const showResult = () => {
-        clearInterval(interval);
-        document.getElementById("quizArea").style.display = "none";
-        resultPanel.style.display = "block";
-        scoreText.textContent = score;
-        totalText.textContent = questions.length;
-        const percent = ((score / questions.length) * 100).toFixed(1);
-        percentText.textContent = `Aproveitamento: ${percent}%`;
-
-        gabaritoContent.innerHTML = "";
-        questions.forEach((q, i) => {
-          const div = document.createElement("div");
-          div.className = "g-item";
-          div.innerHTML = `
-            <strong>Questão ${i + 1}:</strong> ${q.q}<br>
-            <strong>Correta:</strong> ${q.options[q.answer]}<br>
-            <em>${q.comment}</em>
-          `;
-          gabaritoContent.appendChild(div);
-        });
-      };
-
-      document.getElementById("nextBtn").onclick = nextQuestion;
-      document.getElementById("prevBtn").onclick = prevQuestion;
-      document.getElementById("finishBtn").onclick = showResult;
-      document.getElementById("restartBtn").onclick = () => location.reload();
-      document.getElementById("showGabarito").onclick = () => overlay.style.display = "flex";
-      document.getElementById("closeGabarito").onclick = () => overlay.style.display = "none";
-
-      renderQuestion();
-    });
-  </script>
+    </script>
 </body>
 </html>
